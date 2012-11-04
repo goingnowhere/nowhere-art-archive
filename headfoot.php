@@ -43,10 +43,7 @@ function head($features = array(), $args = array())
   </script>
   <? } ?>
   
-  <? if (array_key_exists('map', $features)) { ?>
-  <script src="http://openlayers.org/api/OpenLayers.js"></script>
-  <script src="https://raw.github.com/mapstraction/mxn/master/source/mxn.js?(openlayers)" type="text/javascript"></script>
-  <? } ?>
+
 </head>
 <body>
 <?

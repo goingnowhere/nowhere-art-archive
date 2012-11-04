@@ -1,35 +1,3 @@
-<?
-function outputStructures() {
-  $data = @file_get_contents("data/structures.json");
-  if ($data != FALSE) {
-    $structures = json_decode($data);
-    foreach ($structures->structures as $structure) {
-      print 'makeStructure("' . $structure->name . '", [' . "\n";
-      foreach ($structure->points as $point) {
-          print "[" . $point[0] . " , " . $point[1] . "],\n";
-      }
-      print "]),\n";
-    }
-  }
-}
-
-function outputArt() {
-  $data = @file_get_contents("data/projects_2012.json"); // TODO: allow switching year
-  if ($data != FALSE) {
-    $projects = json_decode($data);
-    foreach ($projects as $id => $project) {
-      print 'makeArt({ id: "' . $id . '", ' .
-            'title: "' . $project->title . '", ' .
-            'thumbId: "' . $project->thumb_id . '", ' .
-            'albumId: "' . $project->album_id . '", ' .
-            'albumKey: "' . $project->album_key . '", ' .
-            'position: [' . $project->position[0] . ", " . $project->position[1] . "]" .
-            '}),' . "\n";
-    }
-  }
-}
-?>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB">
   <head>
@@ -39,15 +7,8 @@ function outputArt() {
     <script charset="UTF-8" type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script>
     <script type="text/javascript" src="js/map.js"></script>
     <? if ($_GET["edit"] == 1) { ?><script type="text/javascript" src="js/map_editor.js"></script><? } ?>
-    <script type="text/javascript">   
-      var structures = [<? outputStructures() ?>];
-      var art = [<? outputArt() ?>];
-    </script>
     <script src="js/simple-smugmug.js"></script>
     <script src="js/galleria/galleria-1.2.7.min.js"></script>
-    <script type="text/javascript">
-      Galleria.loadTheme('js/galleria/themes/classic/galleria.classic.min.js');
-    </script>
 
     <style>
       body { margin: 0px; padding: 0px; font-family: "Ubuntu"; height: 100% }
@@ -59,9 +20,6 @@ function outputArt() {
         position: absolute; left: 0px; top: 0px; margin: 0px; padding: 14px; padding-right: 24px; padding-top: 8px;
         -moz-border-radius-bottomright: 44px; border-bottom-right-radius: 44px; height: 50px
       }
-      /*.sidefade {
-        position: absolute; top: 0px; right: 0px; width: 180px;
-      }*/
       .polylabel {
           font-size: 0.8em; max-width: 300px; min-width: 100px;
       }

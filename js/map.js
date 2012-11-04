@@ -5,6 +5,7 @@ var skydiveStart = 15;
 var skydiveTarget = 18;
 var skydiveTimeout = 2300;
 var lastZoomUpdate;
+var SIZE_FOR_ZOOM = { 17: 25, 18: 50, 19: 75, 20: 150 };
 
 var nowhereSiteLocation = new Microsoft.Maps.Location(41.69692036166501, -0.17015731952668034);
 
@@ -31,18 +32,17 @@ var galleriaConfiguration = { dataSource: [],
   autoplay: 3500, pauseOnInteraction: false,
 }
 
-function makeStructure(name, points) {
-  var structure = new Microsoft.Maps.Polygon(points.map(function(point) {
-    return new Microsoft.Maps.Location(point[0], point[1]);
-  }), defaultPolyOptions);
-  structure.pins = null;
-  structure.name = name;
-  structure.isPoly = true;
-  return structure;
-}
+var art = null;
 
 $(document).ready(function() {
   map = new Microsoft.Maps.Map($("#mapdiv")[0], map_options);
+
+  $.getJSON('data/projects_2012.json', function(data) {
+    art = data;
+    ensureArtDisplayed();
+  });
+  
+  Galleria.loadTheme('js/galleria/themes/classic/galleria.classic.min.js');
 
   Microsoft.Maps.EntityCollection.prototype.forEach = function(callback) {
     for (var i = 0; i < this.getLength(); i++) callback(this.get(i));
@@ -50,9 +50,8 @@ $(document).ready(function() {
   
   Microsoft.Maps.Events.addHandler(map, 'viewchangeend', function(e) {
     if (skydive == SkyDiveState.RUNNING && map.getZoom() == skydiveTarget) {
-      addStructures(); 
-      addArt();
       skydive = SkyDiveState.DONE;
+      ensureArtDisplayed();
     } else if (skydive == SkyDiveState.DONE) {
       if (lastZoomUpdate != map.getZoom()) {
         lastZoomUpdate = map.getZoom();
@@ -66,19 +65,23 @@ $(document).ready(function() {
     map.setView({zoom: skydiveTarget, animate: true});
   }, skydiveTimeout);
 });
-   
-function addStructures() {
-  structures.forEach(function(structure) { map.entities.push(structure); });
+
+function ensureArtDisplayed() {
+  if (art == null || skydive != SkyDiveState.DONE) return;
+  var artPins = [];
+  for (id in art) {
+    var pin = makePin(id, art[id]);
+    artPins.push(pin);
+    map.entities.push(pin);
+  }
+  art = artPins;  
 }
 
-function addArt() {
-  art.forEach(function(piece) { map.entities.push(piece) });
-}
-
-function makeArt(piece) {
-   var thumbURL = function(size) {
+function makePin(id, piece) {
+  piece.id = id;
+  var thumbURL = function(size) {
       return "http://nerochiaro.smugmug.com/photos/##ID##/0/##SIZE##/##ID##-##SIZE##.jpg"
-            .replace(/##ID##/g, piece.thumbId)
+            .replace(/##ID##/g, piece.thumb_id)
             .replace(/##SIZE##/g, size + "x" + size);
   }
   var pin = new Microsoft.Maps.Pushpin(
@@ -103,12 +106,13 @@ function makeArt(piece) {
 
 function loadProject(project) 
 {
+  console.log(project);
   $("#blurb").load("http://nerochiaro.net/art/project.php?year=2012&id=" + project.id + "&ajax=1", function(x) {
     console.log("Loaded");
 
     var smug = new SmugMug();
     smug.call('login.anonymously', {}, function(result) {
-      var args = { AlbumID: project.albumId, AlbumKey: project.albumKey, Extras: 'LargeURL,SmallURL,LightboxURL' };
+      var args = { AlbumID: project.album_id, AlbumKey: project.album_key, Extras: 'LargeURL,SmallURL,LightboxURL' };
       if (result.stat == "ok") smug.call('images.get', args, function(data,ok) {
         if (ok) {
           var images = [];
@@ -132,7 +136,6 @@ function unloadProject() {
   $('#project').hide()
 }
 
-var SIZE_FOR_ZOOM = { 17: 25, 18: 50, 19: 75, 20: 150 };
 function updateArtForZoom(zoom) {
   art.forEach(function(piece) { 
     if (zoom > 16) {
