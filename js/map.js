@@ -43,6 +43,9 @@ $(document).ready(function() {
   });
   
   Galleria.loadTheme('js/galleria/themes/classic/galleria.classic.min.js');
+  if (window.location.search.indexOf("edit=1") != -1) {
+    $.getScript("js/map_editor.js");
+  }
 
   Microsoft.Maps.EntityCollection.prototype.forEach = function(callback) {
     for (var i = 0; i < this.getLength(); i++) callback(this.get(i));
@@ -106,10 +109,7 @@ function makePin(id, piece) {
 
 function loadProject(project) 
 {
-  console.log(project);
   $("#blurb").load("http://nerochiaro.net/art/project.php?year=2012&id=" + project.id + "&ajax=1", function(x) {
-    console.log("Loaded");
-
     var smug = new SmugMug();
     smug.call('login.anonymously', {}, function(result) {
       var args = { AlbumID: project.album_id, AlbumKey: project.album_key, Extras: 'LargeURL,SmallURL,LightboxURL' };

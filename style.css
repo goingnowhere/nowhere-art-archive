@@ -56,3 +56,39 @@ ul#timeline { margin-left: 0; padding-left: 0; white-space: nowrap; }
 #projects p { margin: 4px 100px 10px 10px; }
 #projects h3, #projects p.artistInfo { display: inline; white-space: nowrap }
 #projects p.artistInfo { font-size: 0.8em; color: #a0a0a0; margin-left: 10px }
+
+#mapdiv { margin: 0px; }
+h1 {
+  background-color: #000; /* fallback for browsers that don't support rgba */
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white; font-size: 3em; font-family: "Josefin Slab";
+  position: absolute; left: 0px; top: 0px; margin: 0px; padding: 14px; padding-right: 24px; padding-top: 8px;
+  -moz-border-radius-bottomright: 44px; border-bottom-right-radius: 44px; height: 50px
+}
+.polylabel {
+    font-size: 0.8em; max-width: 300px; min-width: 100px;
+}
+img { display: block; margin: 0px }
+
+.LogoContainer { opacity: 0.2 }
+
+.artpiece { white-space: nowrap; overflow: visible ! important; }
+.artpiece div { font-size: 0.75em ! important; font-family: "Ubuntu" ! important; color: black ! important }
+
+#project { width: 100%; height: 1800px; position: absolute; top: 100px; display: none }
+#project-info { padding: 25px; background-color: rgba(0,0,0,0.9); position: relative }
+#project-info a { color: white; text-decoration: none }
+#project-info #closebox { 
+  position: absolute; top: 0px; right: 0px; padding: 6px;
+  border-left-width: 2px; border-bottom-width: 2px; border-bottom-style: solid; border-left-style: solid;
+  border-color: white; border-color: rgba(255, 255, 255, 0.75); -moz-border-radius-bottomleft: 8px; border-bottom-left-radius: 8px;
+}
+#blurb { color: white }
+
+#title { font-family: 'Josefin Slab', serif; font-size: 2.8em }
+#artist { margin-right: 60px }
+#artist, #country, h2 { font-size: 1.3em;  }
+#country { position: relative; padding-right: 40px; }
+#flag { margin-left: 8px; border: 2px solid black; position: absolute; right: 0px; bottom: 0px; }
+#description, #years { margin-right: 100px }
+#description { margin-top: 20px; margin-bottom: 20px  }
