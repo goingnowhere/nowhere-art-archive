@@ -25,13 +25,6 @@ var defaultPolyOptions = {
   strokeThickness: 1
 };
 
-/* Main configuration for the Galleria photo browser component. */
-var galleriaConfiguration = { dataSource: [],
-  height: 660, minScaleRatio: 1, maxScaleRatio: 1,
-  carousel: false, thumbnails: false, responsive: true,
-  autoplay: 3500, pauseOnInteraction: false,
-}
-
 var art = null;
 
 $(document).ready(function() {
@@ -42,7 +35,6 @@ $(document).ready(function() {
     ensureArtDisplayed();
   });
   
-  Galleria.loadTheme('js/galleria/themes/classic/galleria.classic.min.js');
   if (window.location.search.indexOf("edit=1") != -1) {
     $.getScript("js/map_editor.js");
   }
@@ -102,38 +94,14 @@ function makePin(id, piece) {
     pin.setOptions({visible: isVisible});
   };
   Microsoft.Maps.Events.addHandler(pin, 'click', function(e) {
-    loadProject(piece);
+    $("#project").show(30, function() { displayProject(piece, '#galleria') });
   });
+  $("#closebox").click(function() {
+      $('#project').hide();
+      unloadProject("#galleria");
+  });
+
   return pin;
-}
-
-function loadProject(project) 
-{
-  $("#blurb").load("http://nerochiaro.net/art/project.php?year=2012&id=" + project.id + "&ajax=1", function(x) {
-    var smug = new SmugMug();
-    smug.call('login.anonymously', {}, function(result) {
-      var args = { AlbumID: project.album_id, AlbumKey: project.album_key, Extras: 'LargeURL,SmallURL,LightboxURL' };
-      if (result.stat == "ok") smug.call('images.get', args, function(data,ok) {
-        if (ok) {
-          var images = [];
-          data.Album.Images.forEach(function(img) {
-            images.push({ image: img.LargeURL, link: img.LightboxURL });
-          });
-          $("#project").show(30, function() {
-            galleriaConfiguration.dataSource = images;
-            /* Ideally we should be able to load Galleria only once and then call
-             * galleria.load(images) but it's not working for some reason so the best we can do is
-             * to reload Galleria every time. It seems quick enough anyway */
-            Galleria.run("#galleria", galleriaConfiguration);
-          });
-        }
-      });
-    });
-  });
-}
-
-function unloadProject() {
-  $('#project').hide()
 }
 
 function updateArtForZoom(zoom) {

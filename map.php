@@ -9,14 +9,24 @@
     <script type="text/javascript" src="js/map.js"></script>
     <script src="js/simple-smugmug.js"></script>
     <script src="js/galleria/galleria-1.2.7.min.js"></script>
+    <script src="js/project.js"></script>
   </head>
   <body>
     <div id="mapdiv"></div>
     <h1>Nowhere Art Archive</h1>
     <div id="project">
-      <div id="project-info"><div id="closebox"><a href="javascript:unloadProject()">CLOSE</a></div><div id="blurb"></div></div>
-      <div id="galleria"></div>
+      <div id="project-info">
+        <div id="closebox"><a href="javascript:void(0)">CLOSE</a></div>
+          <div id="title"></div>
+          <div id="artist_info">
+            by <span id="artist"></span>
+            from <span id="country"></span>
+            <img id="flag" height=15 width=30/>
+          </div>
+          <div id="description"></div>
+        </div>
+        <div id="galleria"></div>
+      </div>
     </div>
-    <!--div class="sidefade"><img src="gfx/side_right_fade.png"><img src="gfx/side_right_fade_low.png"></div-->
   </body>
 </html>
