@@ -16,7 +16,7 @@ function setCurrentYear(year) {
   if (yearData) {
     $("#timeline li").removeClass('current');
     $('#y_' + year).addClass('current');
-    $('#smallmap').attr('src', 'map.php?embed=true&year=' + year);
+    $('#smallmap').attr('src', 'map.htm?embed=true&year=' + year);
     $('#mapholder').attr('opacity', 1);
     currentYear = year;
     
@@ -27,7 +27,7 @@ function setCurrentYear(year) {
         var projects = sortProjects(data);
         years['y_' + year].projects = projects;
         projects.forEach(appendProject);
-        $('#catcher').click(function() { location.href = 'map.php?year=' + year });
+        $('#catcher').click(function() { location.href = 'map.htm?year=' + year });
       }).error(function() {
         $('#message').show();
         $('#mapholder').attr('opacity', 0);
@@ -56,7 +56,7 @@ function appendProject(project) {
   $("#projects").append(
     $('<li/>', { class: 'project' }).append(
       $('<div/>', { class: 'topsection' }).append(
-        $('<a/>', { href: 'project.php?year=' + currentYear + '&id=' + project.id }).append(
+        $('<a/>', { href: 'project.htm?year=' + currentYear + '&id=' + project.id }).append(
           $('<h3/>').text(project.title)
         ).append(
           $('<p/>', { class: 'artistInfo' }).text('by ' + project.artist + ' (' + project.countryCode + ')')
