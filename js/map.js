@@ -28,17 +28,38 @@ var defaultPolyOptions = {
 var art = null;
 
 $(document).ready(function() {
-  map = new Microsoft.Maps.Map($("#mapdiv")[0], map_options);
+  var parts = window.location.search;
+  parts = parts.replace("?", "").split('&');
+  var embed = false;
+  var year = 2012;
+  var edit = false;
+  parts.forEach(function(part) {
+    var key_val = part.split('=');
+    if (key_val[0] == 'embed') embed = true;
+    else if (key_val[0] == 'year') year = key_val[1];
+    else if (key_val[0] == 'edit') edit = true;
+  });
 
-  $.getJSON('data/projects_2012.json', function(data) {
+  
+  if (embed) {
+    $("h1").hide();
+    skydiveTarget = 17;
+    map_options.showCopyright = false;
+  }
+
+  map = new Microsoft.Maps.Map($("#mapdiv")[0], map_options);
+  
+
+  $.getJSON('data/projects_' + year + '.json', function(data) {
     art = data;
+    ensureArtDisplayed();
+  }).error(function() {
+    art = {};
     ensureArtDisplayed();
   });
   
-  if (window.location.search.indexOf("edit=1") != -1) {
-    $.getScript("js/map_editor.js");
-  }
-
+  if (edit) $.getScript("js/map_editor.js");
+  
   Microsoft.Maps.EntityCollection.prototype.forEach = function(callback) {
     for (var i = 0; i < this.getLength(); i++) callback(this.get(i));
   }
