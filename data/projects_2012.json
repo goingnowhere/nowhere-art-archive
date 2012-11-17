@@ -1,0 +1,85 @@
+{
+        "fliptwister" : {
+                "title" : "Fliptwister",
+                "artist" : "Niels Arnbak",
+                "country" : "The Netherlands",
+                "countryCode" : "NL",
+                "funded" : true,
+                "type" : "performance",
+                "description" : "You probably played a game of Twister before. But have you ever played it wearing inversion goggles that flip your vision upside down? Dare to rely on your other senses and experience touching the earth like never before !",
+                "album_id": "24573913",
+                "album_key": "NMxpLk",
+                "thumb_id": "i-FMz22tG",
+                "position": [41.696716082293165, -0.1681242050936116] 
+        },
+        
+        "atomicdust" : {
+		"title" : "Atomic Dust",
+		"artist" : "Llama Palacios",
+		"country" : "Spain",
+		"countryCode" : "ES",
+		"type" : "installation",
+		"funded" : true,
+		"description" : "Atomic Dust, \"the Rebirth Machine\", is a complete experience. An artistic bio-construction, which contains the primigeneous centre of the atom. We are sure you have never seen something like that ! Are you ready for a rebirthing to a new universe of consciousness ? Are you ready to see ?",
+		"album_id": "24573983",
+		"album_key": "3FL6pT",
+		"thumb_id": "i-4C9DjwG",
+                "position": [41.696716082312896, -0.16777015350342595]
+	},
+	
+	"beings" : {
+		"title" : "Beings",
+		"artist" : "Petrusco",
+		"country" : "United Kingdom",
+		"countryCode" : "GB",
+		"funded" : true,
+		"type" : "installation",
+		"description": "The idea behind this project is to create \"beings\" from \"dead\" materials.",
+		"album_id": "24573891",
+		"album_key": "7mxNVk",
+		"thumb_id": "i-2Rcb66J",
+                "position": [41.69601511881864, -0.17032898090363346]
+	},
+	
+	"unclocktower" : {
+		"title" : "The Un-clock Tower",
+		"artist" : "Ugo Riboni",
+		"country" : "Spain",
+		"countryCode" : "ES",
+		"type" : "installation",
+		"funded" : true,
+		"description" : "An act of balance between the convenience of a clock tower and the desire to preserve the time bubble atmosphere of Nowhere, this structure features unconventional clock designs that encourage viewers to learn a new way to read time while providing an useful service to the community.",
+		"album_id": "24409291",
+		"album_key": "Gwwp6X",
+		"thumb_id": "i-NXrdSHC",
+		"position": [41.69662395609959, -0.17001248024023585] 
+	},
+	
+	"throughthelasermirror" : {
+		"title" : "Through the Laser Mirror",
+		"artist" : "Guillaume Emont",
+		"country" : "Spain",
+		"countryCode" : "ES",
+		"type" : "installation",
+		"funded" : true,
+		"description" : "Come and play with your laser alter ego in a universe of green light, lines and shapes. Dance with your laser shadow and make it play with virtual objects. Forget about all these pixels in the default world and enjoy the monochrome vectorial world behind the laser mirror !",
+		"album_id": "24573703",
+		"album_key": "mnn6h6",
+		"thumb_id": "i-RfVD4xZ",
+		"position": [41.69678017000393, -0.16857481620825343] 
+	},
+	
+	"dreamcatchersdream" : {
+                "title" : "Dreamcatchers Dream",
+                "artist" : "Ieva Marija Dautartaite",
+                "country" : "Lithuania",
+                "countryCode" : "LT",
+                "type" : "installation",
+                "funded" : true,
+                "description" : "Dreams are succession of images, ideas, emotions and sensations occurring involuntary in the mind during certain stages of sleep. This dream catcher is here to catch the horrid dreams within its webs to disintegrate into dust in the wind and allow the beautiful and free dreams to flow through and create beauty inside and out.",
+                "album_id": "25230032",
+                "album_key": "PnNmKm",
+                "thumb_id": "i-Z8XH39s",
+                "position": [41.696708071322064, -0.1707205834199077]  
+        }
+}
