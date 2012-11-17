@@ -14,6 +14,10 @@
   <body>
     <div id="mapdiv"></div>
     <h1>Nowhere Art Archive</h1>
+    <h2>
+      <a href="http://goingnowhere.org/">&lt; Nowhere</a> <a href="archive.php">&lt; Art Archive</a>
+    </h2>
+
     <div id="project">
       <div id="project-info">
         <div id="closebox"><a href="javascript:void(0)">CLOSE</a></div>

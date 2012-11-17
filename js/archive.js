@@ -16,19 +16,22 @@ function setCurrentYear(year) {
   if (yearData) {
     $("#timeline li").removeClass('current');
     $('#y_' + year).addClass('current');
-    //$('#theme').html(yearData.theme_description);
-    $('#smallmap').attr('src', 'map.php?embed=true&year=' + year).attr('opacity', 1);
+    $('#smallmap').attr('src', 'map.php?embed=true&year=' + year);
+    $('#mapholder').attr('opacity', 1);
     currentYear = year;
     
     $('#projects').empty();
     if (year.projects == undefined) {
       $.getJSON("data/projects_" + year + ".json", function(data) {
+        $('#message').hide();
         var projects = sortProjects(data);
         years['y_' + year].projects = projects;
         projects.forEach(appendProject);
+        $('#catcher').click(function() { location.href = 'map.php?year=' + year });
       }).error(function() {
-        $('#theme').text("We didn't manage to add any projects for this year yet. Please check back later.");
-        $('#smallmap').attr('opacity', 0);
+        $('#message').show();
+        $('#mapholder').attr('opacity', 0);
+        $('#catcher').click(function() {})
       });
     } else for (id in year.projects) appendProject(id, year.projects[id]);
   }
@@ -64,3 +67,16 @@ function appendProject(project) {
     )
   );
 }
+
+$(document).ready(function() {
+  $.getJSON("data/years.json", function(data) {
+    data["years"].forEach(appendYear);
+
+    var parts = window.location.search;
+    parts = parts.replace("?", "").split('&');
+    parts.forEach(function(part) {
+      var key_val = part.split('=');
+      if (key_val[0] == 'year') setCurrentYear(key_val[1]);
+    });
+  });
+});

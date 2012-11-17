@@ -26,29 +26,29 @@ var defaultPolyOptions = {
 };
 
 var art = null;
+var embedMode = false;
 
 $(document).ready(function() {
   var parts = window.location.search;
   parts = parts.replace("?", "").split('&');
-  var embed = false;
   var year = 2012;
   var edit = false;
   parts.forEach(function(part) {
     var key_val = part.split('=');
-    if (key_val[0] == 'embed') embed = true;
+    if (key_val[0] == 'embed') embedMode = true;
     else if (key_val[0] == 'year') year = key_val[1];
     else if (key_val[0] == 'edit') edit = true;
   });
 
+  $('h1').text(year + ' Art Map');
   
-  if (embed) {
-    $("h1").hide();
+  if (embedMode) {
+    $("h1,h2").hide();
     skydiveTarget = 17;
     map_options.showCopyright = false;
   }
 
   map = new Microsoft.Maps.Map($("#mapdiv")[0], map_options);
-  
 
   $.getJSON('data/projects_' + year + '.json', function(data) {
     art = data;
@@ -91,6 +91,7 @@ function ensureArtDisplayed() {
     map.entities.push(pin);
   }
   art = artPins;  
+ 
 }
 
 function makePin(id, piece) {
@@ -102,8 +103,8 @@ function makePin(id, piece) {
   }
   var pin = new Microsoft.Maps.Pushpin(
     new Microsoft.Maps.Location(piece.position[0], piece.position[1]),
-    { typeName: "artpiece", text: piece.title,
-      icon: thumbURL(50),
+    { typeName: "artpiece", text: (embedMode) ? '' : piece.title,
+      icon: thumbURL(SIZE_FOR_ZOOM[map.getZoom()]),
       textOffset: new Microsoft.Maps.Point(0, -14),
       anchor: new Microsoft.Maps.Point(0, 0)
     } 
