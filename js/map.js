@@ -27,6 +27,36 @@ var defaultPolyOptions = {
 
 var art = null;
 var embedMode = false;
+var yearData = null;
+
+function getProjects(year, callback) {
+  var smug = new SmugMug();
+  smug.call("albums.get", { NickName: 'nowhere-art', Extras: 'Keywords,NiceName,Description' }, function(result) {
+    if (result.stat == "ok") {
+      var years = collectYears(result.Albums);
+      if (years[year]) {
+        yearData = years[year]
+        art = {};
+        var args = { AlbumID: yearData.infoAlbum.id,
+                     AlbumKey: yearData.infoAlbum.Key,
+                     Extras: "Keywords,Caption,TinyURL" };
+        smug.call("images.get", args, function(result) {
+          if (result.stat == "ok") {
+            var projects = []
+            result.Album.Images.forEach(function(image) {
+              var project = parseInfo(image.Caption);
+              project.image = image.TinyURL;
+              project.album_id = yearData.album.id;
+              project.album_key = yearData.album.Key;
+              art[project.id] = project;
+            });
+            callback();
+          }
+        });
+      }
+    }
+  });
+}
 
 $(document).ready(function() {
   var parts = window.location.search;
@@ -49,16 +79,7 @@ $(document).ready(function() {
   }
 
   map = new Microsoft.Maps.Map($("#mapdiv")[0], map_options);
-
-  $.getJSON('data/projects_' + year + '.json', function(data) {
-    art = data;
-    ensureArtDisplayed();
-  }).error(function() {
-    art = {};
-    ensureArtDisplayed();
-  });
-  
-  if (edit) $.getScript("js/map_editor.js");
+  getProjects(year, ensureArtDisplayed);
   
   Microsoft.Maps.EntityCollection.prototype.forEach = function(callback) {
     for (var i = 0; i < this.getLength(); i++) callback(this.get(i));
@@ -90,16 +111,14 @@ function ensureArtDisplayed() {
     artPins.push(pin);
     map.entities.push(pin);
   }
-  art = artPins;  
- 
+  art = artPins; 
 }
 
 function makePin(id, piece) {
   piece.id = id;
   var thumbURL = function(size) {
-      return "http://nerochiaro.smugmug.com/photos/##ID##/0/##SIZE##/##ID##-##SIZE##.jpg"
-            .replace(/##ID##/g, piece.thumb_id)
-            .replace(/##SIZE##/g, size + "x" + size);
+      return piece.image.replace(/\/Ti\//g, "/" + size + "x" + size + "/")
+            .replace(/-Ti\./g, "-" + size + "x" + size + ".");
   }
   var pin = new Microsoft.Maps.Pushpin(
     new Microsoft.Maps.Location(piece.position[0], piece.position[1]),

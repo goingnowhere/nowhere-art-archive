@@ -6,6 +6,7 @@ var galleriaConfiguration = { dataSource: [],
 }
 
 var galleriaRunning = false;
+var smug = new SmugMug();
 
 function displayFail() {
   $("#title").text("Not Found");
@@ -24,15 +25,15 @@ function displayProject(project, where) {
     $("#description").html(project.description);
 
     var smug = new SmugMug();
-    smug.call('login.anonymously', {}, function(result) {
-      var args = { AlbumID: project.album_id, AlbumKey: project.album_key, Extras: 'LargeURL,SmallURL,LightboxURL' };
-      if (result.stat == "ok") smug.call('images.get', args, function(data,ok) {
-        if (ok) {
-          var images = [];
-          data.Album.Images.forEach(function(img) {
-            images.push({ image: img.LargeURL, link: img.LightboxURL });
-          });
-          
+    var args = { AlbumID: project.album_id, AlbumKey: project.album_key, Extras: 'Keywords,LargeURL,SmallURL,LightboxURL' };
+    smug.call('images.get', args, function(data,ok) {
+      if (ok) {
+        var images = [];
+        filterAlbum(data.Album.Images, project.id).forEach(function(img) {
+          images.push({ image: img.LargeURL, link: img.LightboxURL });
+        });
+
+        if (images.length > 0) {
           if (!galleriaRunning) {
             Galleria.run(where, galleriaConfiguration);
             Galleria.on("image", function(e) { 
@@ -42,8 +43,11 @@ function displayProject(project, where) {
           }
           Galleria.get(0).load(images);
           Galleria.get(0).play(galleriaConfiguration.autoplay);
+        } else {
+          $("#description").append($("<p/>").text("We don't have any pictures for this project yet. Please check back later or send us some !"));
+          $(where).css({ opacity: 0.01 });
         }
-      });
+      }
     });
   }
 }
@@ -66,9 +70,36 @@ $(document).ready(function() {
     else if (key_val[0] == 'year') project_year = key_val[1];
   });
 
-  if (project_year == null || project_id == null) displayFail();
-  $.getJSON('data/projects_' + project_year + '.json', function(data) {
-    var project = data[project_id];
-    displayProject(project, "#galleria");
-  }).error(function() { displayFail(); });
+  if (project_year == null || project_id == null) {
+    displayFail();
+    return;
+  }
+                  
+  smug.call("albums.get", { NickName: 'nowhere-art', Extras: 'Keywords,NiceName,Description' }, function(result) {
+    if (result.stat == "ok") {
+      years = collectYears(result.Albums);
+      if (years[project_year]) {
+        var yearData = years[project_year];
+        var args = { AlbumID: yearData.infoAlbum.id,
+                     AlbumKey: yearData.infoAlbum.Key,
+                     Extras: "Keywords,Caption" };
+        smug.call("images.get", args, function(result) {
+          if (result.stat == "ok") {
+            var project = null;
+            result.Album.Images.forEach(function(image) {
+              var info = parseInfo(image.Caption);
+              if (info.id != project_id) return;
+              project = info;
+              console.log(yearData.album);
+              project.album_id = yearData.album.id;
+              project.album_key = yearData.album.Key;
+            });
+            if (project) displayProject(project);
+            else displayFail();
+          } else displayFail();
+        });
+      } else displayFail();
+    } else displayFail();
+  });
+                
 });
