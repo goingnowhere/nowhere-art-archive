@@ -18,6 +18,17 @@ p { font-size: 0.75em }
 #flag { margin-left: 8px; border: 2px solid black; display: inline}
 #description, #years { margin-right: 100px }
 #description { margin-top: 20px; margin-bottom: 20px  }
+#corrections {
+  margin-top: 20px; padding-left: 20px; padding-top: 8px; padding-bottom: 8px;
+  position: absolute; bottom: 0px; width: 100%; z-index: 100;
+  border-top: 1px solid black;
+}
+
+#maincorrections {
+  padding-left: 20px; padding-top: 20px;
+  margin-top: 20px; margin-bottom: 10px;
+  border-top: 1px solid black; font-size: 0.75em;
+}
 
 #title {
   color: white; background-color: #000;

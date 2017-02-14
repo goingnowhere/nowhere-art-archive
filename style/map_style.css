@@ -46,3 +46,10 @@ img { display: block; margin: 0px }
 #flag { border: 2px solid black; display: inline; vertical-align: baseline }
 #description, #years { margin-right: 100px }
 #description { margin-top: 20px }
+
+#corrections {
+  background-color: #000; /* fallback for browsers that don't support rgba */
+  background-color: rgba(0, 0, 0, 0.75);
+  color: white;
+  padding-left: 25px; padding-top: 16px; padding-bottom: 8px;
+}
