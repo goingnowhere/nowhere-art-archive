@@ -10,7 +10,7 @@ var SIZE_FOR_ZOOM = { 17: 25, 18: 50, 19: 75, 20: 150 };
 var nowhereSiteLocation = new Microsoft.Maps.Location(41.69692036166501, -0.17015731952668034);
 
 var map_options = {
-  credentials: "AqTGBsziZHIJYYxgivLBf0hVdrAk9mWO5cQcb8Yux8sW5M8c8opEC2lZqKR1ZZXf",
+  credentials: "Ao4H-8bsrOuVZGX_x1rw0A804s5EaWKpemtcDYFqdIUEsy8GZHLSri_eTPCChuQX",
   center: nowhereSiteLocation,
   zoom: skydiveStart,
   mapTypeId: Microsoft.Maps.MapTypeId.aerial,
@@ -139,7 +139,7 @@ function makePin(id, piece) {
   });
   $("#closebox").click(function() {
       $('#project').hide();
-      unloadProject("#galleria");
+      unloadProject("#gallery");
   });
 
   return pin;
