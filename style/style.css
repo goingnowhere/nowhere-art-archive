@@ -43,7 +43,7 @@ p { font-size: 0.75em }
   position: absolute; top: 0px; right: 0px; height: 25px; padding: 5px;
   -moz-border-bottom-left-radius: 22px; border-bottom-left-radius: 22px;
 }
-#galleria { margin-left: 0px; padding-left: 0px }
+#gallery { margin-left: 0px; padding-left: 0px; }
 
 a { color: #707070; text-decoration: none }
 a:hover { text-decoration: underline }
