@@ -35,10 +35,9 @@ function collectYears(albums) {
   var years = {};
   
   albums.forEach(function(album) {
-    extractAlbum(album.Keywords, album, years) ||
-    extractAlbum(album.NiceName, album, years) ||
-    extractAlbum(album.Title, album, years);
+    extractAlbum(album.NiceName, album, years)
   });
+
   
   return years;
 }

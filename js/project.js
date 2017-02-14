@@ -19,11 +19,14 @@ function displayProject(project, where) {
   if (!project) {
     displayFail();
   } else {
-    $("#title").text(project.title);
-    $("#artist").text(project.artist);
-    $("#country").text(project.country);
-    $("#flag").attr("src", "http://www.geonames.org/flags/x/" + project.countryCode.toLowerCase() + ".gif");
-    $("#description").html(project.description);
+    $("#title").text((project.title) ? project.title : "Missing title tag. Id: " + project.id);
+    $("#artist").text((project.artist) ? project.artist : "Someone");
+    $("#country").text((project.country) ? project.country : "Somewhere");
+    if (project.countryCode) $("#flag").attr("src", "http://www.geonames.org/flags/x/" + project.countryCode.toLowerCase() + ".gif").show();
+    else $("#flag").hide();
+    $("#artist_info").show();
+    if (project.description) $("#description").html(project.description).show();
+    else $("#description").hide();
 
     var smug = new SmugMug();
     var args = { AlbumID: project.album_id, AlbumKey: project.album_key, Extras: 'Keywords,LargeURL,SmallURL,LightboxURL,Caption' };
