@@ -89,24 +89,36 @@ $(document).ready(function() {
       years = collectYears(result.Albums);
       if (years[project_year]) {
         var yearData = years[project_year];
-        var args = { AlbumID: yearData.infoAlbum.id,
-                     AlbumKey: yearData.infoAlbum.Key,
-                     Extras: "Keywords,Caption" };
-        smug.call("images.get", args, function(result) {
-          if (result.stat == "ok") {
-            var project = null;
-            result.Album.Images.forEach(function(image) {
-              var info = parseInfo(image.Caption);
-              if (info.id != project_id) return;
-              project = info;
-              console.log(yearData.album);
-              project.album_id = yearData.album.id;
-              project.album_key = yearData.album.Key;
-            });
-            if (project) displayProject(project);
-            else displayFail();
-          } else displayFail();
-        });
+        if (project_id == "__other__") {
+          var project = {
+            id: "__other__",
+            title: "Other projects from " + project_year,
+            artist: "Various Artists",
+            country: "Somewhere",
+            description: "More photos from various art projects that we haven't been able to identify or categorize yet",
+            album_id: yearData.album.id,
+            album_key: yearData.album.Key
+          };
+          displayProject(project, "#gallery")
+        } else {
+          var args = { AlbumID: yearData.infoAlbum.id,
+                      AlbumKey: yearData.infoAlbum.Key,
+                      Extras: "Keywords,Caption" };
+          smug.call("images.get", args, function(result) {
+            if (result.stat == "ok") {
+              var project = null;
+              result.Album.Images.forEach(function(image) {
+                var info = parseInfo(image.Caption);
+                if (info.id != project_id) return;
+                project = info;
+                project.album_id = yearData.album.id;
+                project.album_key = yearData.album.Key;
+              });
+              if (project) displayProject(project, "#gallery");
+              else displayFail();
+            } else displayFail();
+          });
+        }
       } else displayFail();
     } else displayFail();
   });

@@ -23,21 +23,46 @@ function setCurrentYear(year) {
     
     $('#projects').empty();
     if (year.projects == undefined) {
-      var args = { AlbumID: years[year].infoAlbum.id,
-                   AlbumKey: years[year].infoAlbum.Key,
-                   Extras: "Keywords,Caption,TinyURL" };
-      smug.call("images.get", args, function(result) {
-        if (result.stat == "ok") {
-          var projects = []
-          result.Album.Images.forEach(function(image) {
-              var project = { info: parseInfo(image.Caption) }
-              project.image = image;
-              projects.push(project);
-          });
-          projects.sort(function(a, b) { if (a.info.title > b.info.title) return 1; else -1 });
-          projects.forEach(function(project) { appendProject(year, project); });
-        }
-      });
+      function checkOtherPhotos() {
+        /* Go through all the pictures for this year and see which ones have
+          * no known project id in the tags, and create a new group for them at the bottom */
+        var args = { AlbumID: years[year].album.id,
+                      AlbumKey: years[year].album.Key,
+                      Extras: "Keywords" };
+        smug.call("images.get", args, function(result) {
+          var otherCount = 0;
+          if (result.stat == "ok") {
+            result.Album.Images.forEach(function(image) {
+              if (image.Keywords == "") otherCount++;
+            });
+          }
+          if (otherCount > 0) appendProject(year, { info: { 
+            id: "__other__",
+            title: "Other projects",
+            artist: "Various Artists",
+            description: "" + otherCount + " more photos from various art projects that we haven't been able to identify or categorize yet"
+          }});
+        });
+      }
+      
+      if (years[year].infoAlbum) {
+        var args = { AlbumID: years[year].infoAlbum.id,
+                    AlbumKey: years[year].infoAlbum.Key,
+                    Extras: "Keywords,Caption,TinyURL" };
+        smug.call("images.get", args, function(result) {
+          if (result.stat == "ok") {
+            var projects = []
+            result.Album.Images.forEach(function(image) {
+                var project = { info: parseInfo(image.Caption) }
+                project.image = image;
+                projects.push(project);
+            });
+            projects.sort(function(a, b) { if (a.info.title > b.info.title) return 1; else -1 });
+            projects.forEach(function(project) { appendProject(year, project); });
+            checkOtherPhotos();
+          }
+        })
+      } else checkOtherPhotos();
     }
   }
 }

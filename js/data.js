@@ -44,6 +44,7 @@ function collectYears(albums) {
 
 function filterAlbum(album, keyword) {
   return album.filter(function(picture) {
-    return $.inArray(keyword, picture.Keywords.split(", ")) != -1
+    if (keyword == "__other__") return picture.Keywords == "";
+    else return $.inArray(keyword, picture.Keywords.split(", ")) != -1
   });
 }
