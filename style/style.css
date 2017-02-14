@@ -38,7 +38,7 @@ p { font-size: 0.75em }
 }
 #header {
   font-family: 'Josefin Slab'; font-size: 0.9em;
-  text-align: right; background-color: #000;
+  text-align: right; background-color: #000; color: white;
   border-left: 3px solid black; border-bottom: 3px solid black;
   position: absolute; top: 0px; right: 0px; height: 25px; padding: 5px;
   -moz-border-bottom-left-radius: 22px; border-bottom-left-radius: 22px;
@@ -52,20 +52,20 @@ a:visited { color: #707070 }
 #project a { color: #a0a0a0 }
 
 #timeline p, #timeline h2 { margin: 0px; margin-top: 8px; padding: 0px }
-#timeline h2 { white-space: nowrap; display: inline; padding: 10px }
+#timeline h2 { white-space: nowrap; display: inline; margin-right: 40px; }
 ul#timeline { margin-left: 0; padding-left: 0; white-space: nowrap; }
-#timeline li { display: inline; list-style-type: none; padding-right: 10px; }
+#timeline li { display: inline; list-style-type: none; padding-right: 10px; margin-bottom: 10px; float: left; }
+#timeline .theme { color: #707070; margin-top: 2px; font-size: 0.8em }
+.year.current h2 { 
+  border-top: 4px solid black;
+  border-bottom: 4px solid black;
+  -moz-border-radius: 8px; border-radius: 8px;
+}
+.year h2 { }
 
-#mapholder { position: relative; height: 300px; margin-left: 20px; margin-right: 100px; border: 2px solid black; cursor: pointer }
+#mapholder { position: relative; height: 300px; margin-left: 20px; margin-right: 100px;  border: 2px solid black; cursor: pointer }
 #smallmap, #catcher{ position: absolute; height: 100%; width: 100%; border: 0px }
 #message { display: none; margin-left: 20px; margin-top: 20px }
-
-.year.current { 
-  border: 4px solid black;
-  -moz-border-radius: 8px; border-radius: 8px;
-  padding: 4px; margin-right: 10px;
-}
-.year h2 { padding-right: 10px }
 
 #projects {
   margin-left: 0; padding-left: 0; list-style: none;
