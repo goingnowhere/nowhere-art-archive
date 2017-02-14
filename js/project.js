@@ -1,11 +1,12 @@
-/* Main configuration for the Galleria photo browser component. */
-var galleriaConfiguration = { dataSource: [],
-  height: 660, minScaleRatio: 1, maxScaleRatio: 1,
-  carousel: false, thumbnails: false, responsive: true,
-  autoplay: 3500, pauseOnInteraction: false,
-}
+var galleryConfiguration = {
+  enable_overlays: true,
+  show_filmstrip: false,
+  panel_scale: 'fit',
+  autoplay: true,
+  panel_width: 800,
+  panel_height: 600
+};
 
-var galleriaRunning = false;
 var smug = new SmugMug();
 
 function displayFail() {
@@ -25,27 +26,32 @@ function displayProject(project, where) {
     $("#description").html(project.description);
 
     var smug = new SmugMug();
-    var args = { AlbumID: project.album_id, AlbumKey: project.album_key, Extras: 'Keywords,LargeURL,SmallURL,LightboxURL' };
+    var args = { AlbumID: project.album_id, AlbumKey: project.album_key, Extras: 'Keywords,LargeURL,SmallURL,LightboxURL,Caption' };
     smug.call('images.get', args, function(data,ok) {
       if (ok) {
         var images = [];
         filterAlbum(data.Album.Images, project.id).forEach(function(img) {
-          images.push({ image: img.LargeURL, link: img.LightboxURL });
+          images.push({ image: img.LargeURL, link: img.LightboxURL, caption: img.Caption });
         });
 
         if (images.length > 0) {
-          if (!galleriaRunning) {
-            Galleria.run(where, galleriaConfiguration);
-            Galleria.on("image", function(e) { 
-              if (e.index == 0) $(where).css({ opacity: 1 });
-            });
-            galleriaRunning = true;
-          }
-          Galleria.get(0).load(images);
-          Galleria.get(0).play(galleriaConfiguration.autoplay);
+          $(where).empty();
+          images.forEach(function(image) {
+              $(where).append($("<li/>").append($("<img/>", { 
+                src: image.image, 
+                title: (image.caption) ? image.caption : "",
+                'data-description': ''
+              })));
+          });
+          $(where).galleryView(galleryConfiguration);
+          // TODO: This should be done in the gallery style but I'll do that another time.
+          $(".gv_galleryWrap").css("width", "").css("margin", "0 auto").css("background", "#000").css("text-align", "center");
+          $(".gv_gallery").css("position", "").css("margin", "0 auto");
+          $(".gv_panelWrap").css("top", "").css("left", "");
+          //$(where).show()
         } else {
           $("#description").append($("<p/>").text("We don't have any pictures for this project yet. Please check back later or send us some !"));
-          $(where).css({ opacity: 0.01 });
+          $(where).hide();
         }
       }
     });
@@ -53,13 +59,13 @@ function displayProject(project, where) {
 }
 
 function unloadProject(where) {
-  Galleria.get(0).pause();
-  $(where).css({ opacity: 0.01 });
+  $(where).hide();
+  $(".gv_galleryWrap").remove();
+  $(".gv_imageStore").remove();
+  $("#project-info").append($("<ul/>").attr("id", where.replace("#", "")));
 }
 
 $(document).ready(function() {
-  Galleria.loadTheme('js/galleria/themes/classic/galleria.classic.min.js');
-
   var parts = window.location.search;
   parts = parts.replace("?", "").split('&');
   var project_id = null;
