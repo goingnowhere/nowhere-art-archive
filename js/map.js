@@ -71,6 +71,7 @@ $(document).ready(function() {
   });
 
   $('h1').text(year + ' Art Map');
+  $('#back-archive').attr('href', 'archive.htm#' + year);
   
   if (embedMode) {
     $("h1,h2").hide();
