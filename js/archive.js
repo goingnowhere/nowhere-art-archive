@@ -16,7 +16,12 @@ function setCurrentYear(year) {
   if (years[year]) {
     $("#timeline li").removeClass('current');
     $('#y_' + year).addClass('current');
-    $('#smallmap').attr('src', 'map.htm?embed=true&year=' + year);
+    
+    if (years[year].info && years[year].info.position) {
+      $('#smallmap').attr('src', 'map.htm?embed=true&year=' + year);
+      $('#mapholder').show();
+    } else $('#mapholder').hide();
+    
     $('#mapholder').attr('opacity', 1);
     $('#catcher').click(function() { window.location.href = 'map.htm?year=' + year; });
     currentYear = year;

@@ -36,6 +36,7 @@ function getProjects(year, callback) {
       var years = collectYears(result.Albums);
       if (years[year]) {
         yearData = years[year]
+        if (yearData.info && yearData.info.position) createMap(yearData.info.position);
         art = {};
         var args = { AlbumID: yearData.infoAlbum.id,
                      AlbumKey: yearData.infoAlbum.Key,
@@ -45,10 +46,12 @@ function getProjects(year, callback) {
             var projects = []
             result.Album.Images.forEach(function(image) {
               var project = parseInfo(image.Caption);
-              project.image = image.TinyURL;
-              project.album_id = yearData.album.id;
-              project.album_key = yearData.album.Key;
-              art[project.id] = project;
+              if (project.position && project.position.length > 1) {
+                project.image = image.TinyURL;
+                project.album_id = yearData.album.id;
+                project.album_key = yearData.album.Key;
+                art[project.id] = project;
+              }
             });
             callback();
           }
@@ -82,6 +85,12 @@ $(document).ready(function() {
   map = new Microsoft.Maps.Map($("#mapdiv")[0], map_options);
   getProjects(year, ensureArtDisplayed);
   
+});
+
+function createMap(location) {
+  map_options.center = new Microsoft.Maps.Location(location[0], location[1]);
+  map = new Microsoft.Maps.Map($("#mapdiv")[0], map_options);
+
   Microsoft.Maps.EntityCollection.prototype.forEach = function(callback) {
     for (var i = 0; i < this.getLength(); i++) callback(this.get(i));
   }
