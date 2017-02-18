@@ -145,7 +145,8 @@ function makePin(id, piece) {
     pin.setOptions({visible: isVisible});
   };
   Microsoft.Maps.Events.addHandler(pin, 'click', function(e) {
-    $("#project").show(30, function() { displayProject(piece, '#galleria') });
+    $("#project").show(30, function() { displayProject(piece, '#gallery') });
+  });
   });
   $("#closebox").click(function() {
       $('#project').hide();
