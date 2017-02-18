@@ -14,7 +14,7 @@ var map_options = {
   center: nowhereSiteLocation,
   zoom: skydiveStart,
   mapTypeId: Microsoft.Maps.MapTypeId.aerial,
-  showDashboard: false, showMapTypeSelector: false, showScalebar: false,
+  showDashboard: true, showMapTypeSelector: false, showScalebar: false,
   enableSearchLogo: false, enableClickableLogo: false
 }
 
@@ -80,11 +80,10 @@ $(document).ready(function() {
     $("h1,h2").hide();
     skydiveTarget = 17;
     map_options.showCopyright = false;
+    map_options.showDashboard = false;
   }
 
-  map = new Microsoft.Maps.Map($("#mapdiv")[0], map_options);
   getProjects(year, ensureArtDisplayed);
-  
 });
 
 function createMap(location) {
@@ -96,6 +95,14 @@ function createMap(location) {
   }
   
   Microsoft.Maps.Events.addHandler(map, 'viewchangeend', function(e) {
+    // This has to be set here because when the map loads it overrides any styles
+    // we might have defined in the style sheet for map elements.
+    $('.NavBar_zoomControlContainer').css({ 
+      top: '80px', left: '0px', 
+      'background-color': 'black', 'background-color': 'rgba(0, 0, 0, 0.75)',
+      '-moz-border-radius-bottomright': '8px', 'border-bottom-right-radius': '8px'
+    });
+    
     if (skydive == SkyDiveState.RUNNING && map.getZoom() == skydiveTarget) {
       skydive = SkyDiveState.DONE;
       ensureArtDisplayed();
@@ -110,8 +117,8 @@ function createMap(location) {
   setTimeout(function() {
     skydive = SkyDiveState.RUNNING;
     map.setView({zoom: skydiveTarget, animate: true});
-  }, skydiveTimeout);
-});
+  }, skydiveTimeout); 
+}
 
 function ensureArtDisplayed() {
   if (art == null || skydive != SkyDiveState.DONE) return;
