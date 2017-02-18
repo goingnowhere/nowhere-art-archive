@@ -6,6 +6,7 @@ var skydiveTarget = 18;
 var skydiveTimeout = 2300;
 var lastZoomUpdate;
 var SIZE_FOR_ZOOM = { 17: 25, 18: 50, 19: 75, 20: 150 };
+var edit = false;
 
 var nowhereSiteLocation = new Microsoft.Maps.Location(41.69692036166501, -0.17015731952668034);
 
@@ -65,7 +66,6 @@ $(document).ready(function() {
   var parts = window.location.search;
   parts = parts.replace("?", "").split('&');
   var year = 2012;
-  var edit = false;
   parts.forEach(function(part) {
     var key_val = part.split('=');
     if (key_val[0] == 'embed') embedMode = true;
@@ -113,7 +113,15 @@ function createMap(location) {
       }
     }
   });
-
+  
+  Microsoft.Maps.Events.addHandler(map, 'click', function(e) { 
+    if (edit) {
+      var point = new Microsoft.Maps.Point(e.getX(), e.getY());
+      var loc = e.target.tryPixelToLocation(point);
+      $("#latlong").text(loc.latitude + ", " + loc.longitude).show();
+    }
+  });
+  
   setTimeout(function() {
     skydive = SkyDiveState.RUNNING;
     map.setView({zoom: skydiveTarget, animate: true});
@@ -154,6 +162,9 @@ function makePin(id, piece) {
   Microsoft.Maps.Events.addHandler(pin, 'click', function(e) {
     $("#project").show(30, function() { displayProject(piece, '#gallery') });
   });
+  Microsoft.Maps.Events.addHandler(pin, 'dragend', function(e) {
+    var loc = pin.getLocation();
+    $("#latlong").text(loc.latitude + ", " + loc.longitude).show();
   });
   $("#closebox").click(function() {
       $('#project').hide();

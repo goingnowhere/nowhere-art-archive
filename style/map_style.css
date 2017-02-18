@@ -1,6 +1,6 @@
 body { margin: 0px; padding: 0px; font-family: "Ubuntu"; height: 100% }
 #mapdiv { margin: 0px; }
-h1, h2 {
+h1, h2, #latlong {
   background-color: #000; /* fallback for browsers that don't support rgba */
   background-color: rgba(0, 0, 0, 0.75);
   color: white; font-family: "Josefin Slab";
