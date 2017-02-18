@@ -83,6 +83,8 @@ $(document).ready(function() {
     displayFail();
     return;
   }
+  
+  $("#to_archive").attr("href", $("#to_archive").attr("href") + "#" + project_year);
                   
   smug.call("albums.get", { NickName: 'nowhere-art', Extras: 'Keywords,NiceName,Description' }, function(result) {
     if (result.stat == "ok") {

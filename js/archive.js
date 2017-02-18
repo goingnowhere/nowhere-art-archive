@@ -76,17 +76,15 @@ function appendYear(year) {
   var id = 'y_' + year;
   yearData = years[year];
   var theme;
+  var f = function() { setCurrentYear(year); window.location.hash = year; return false; }
   if (yearData.info) theme = yearData.info.theme;
   $('#timeline').append(
     $('<li/>', { class: 'year', id: id }).append(
       $('<h2/>').append(
-        $('<a/>', { href: '#' }).text(year).on("click", function() {
-          setCurrentYear(year); return false;
-        })
+        $('<a/>', { href: '#' + year }).text(year).on("click", f)
       )
-    ).append((theme) ? '"' + theme + '"' : '')
+    ).append($('<div/>', { class: 'theme' }).append($('<a/>', { href: ('#' + year) }).text(year).on("click", f).text((theme) ? theme : '')))
   );
-  if (currentYear == null) setCurrentYear(year);
 }
 
 function appendProject(year, project) {
@@ -108,13 +106,18 @@ function appendProject(year, project) {
 
 
 $(document).ready(function() {
+  var requested_year = window.location.hash.replace("#", "");
+    
   smug.call("albums.get", { NickName: 'nowhere-art', Extras: 'Keywords,NiceName,Description' }, function(result) {
   if (result.stat == "ok") {
       years = collectYears(result.Albums); 
       var dates = [];
       for (var year in years) dates.push(year);
       dates.sort();
-      dates.reverse().forEach(appendYear);
+      dates = dates.reverse();
+      dates.forEach(appendYear);
+      if (requested_year != null && years[requested_year]) setCurrentYear(requested_year);
+      if (currentYear == null) setCurrentYear(dates[0]);
     }
   });
 });
