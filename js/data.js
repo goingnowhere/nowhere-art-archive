@@ -5,7 +5,11 @@ function parseInfo(text) {
         if (eq != -1) {
           var key = $.trim(line.substr(0, eq));
           var value = $.trim(line.substr(eq + 1));
-          if (key == "position") value = value.split(/, /);
+          if (key == "position") {
+            value = value.split(/,/);
+            value[0] = parseFloat(value[0]);
+            value[1] = parseFloat(value[1]);
+          }
           info[key] = value;
         }
     });
