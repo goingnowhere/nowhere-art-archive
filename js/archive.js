@@ -88,19 +88,22 @@ function appendYear(year) {
 }
 
 function appendProject(year, project) {
-  $("#projects").append(
-    $('<li/>', { class: 'project' }).append(
-      $('<div/>', { class: 'topsection' }).append(
-        $('<a/>', { href: 'project.htm?year=' + year + '&id=' + project.info.id }).append(
-          $('<h3/>').text(project.info.title)
-        ).append(
-          $('<p/>', { class: 'artistInfo' }).text('by ' + project.info.artist + ' (' + project.info.countryCode + ')')
+  if (project.info.id) {
+    $("#projects").append(
+      $('<li/>', { class: 'project' }).append(
+        $('<div/>', { class: 'topsection' }).append(
+          $('<a/>', { href: 'project.htm?year=' + year + '&id=' + project.info.id }).append(
+            $('<h3/>').text((project.info.title) ? project.info.title : "Missing title tag. Project id: " + project.info.id)
+          ).append(
+            $('<p/>', { class: 'artistInfo' }).text('by ' + (project.info.artist ? project.info.artist : "Someone") + 
+                                                    ((project.info.countryCode) ? ' (' + project.info.countryCode + ')' : ''))
+          )
         )
+      ).append(
+        $('<p/>').html(project.info.description)
       )
-    ).append(
-      $('<p/>').text(project.info.description)
-    )
-  );
+    );
+  }
 }
 
 
