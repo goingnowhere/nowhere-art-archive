@@ -75,7 +75,7 @@ $(document).ready(function() {
 
   $('h1').text(year + ' Art Map');
   $('#back-archive').attr('href', 'archive.htm#' + year);
-  
+
   if (embedMode) {
     $("h1,h2").hide();
     skydiveTarget = 17;
@@ -93,16 +93,16 @@ function createMap(location) {
   Microsoft.Maps.EntityCollection.prototype.forEach = function(callback) {
     for (var i = 0; i < this.getLength(); i++) callback(this.get(i));
   }
-  
+
   Microsoft.Maps.Events.addHandler(map, 'viewchangeend', function(e) {
     // This has to be set here because when the map loads it overrides any styles
     // we might have defined in the style sheet for map elements.
-    $('.NavBar_zoomControlContainer').css({ 
-      top: '80px', left: '0px', 
+    $('.NavBar_zoomControlContainer').css({
+      top: '80px', left: '0px',
       'background-color': 'black', 'background-color': 'rgba(0, 0, 0, 0.75)',
       '-moz-border-radius-bottomright': '8px', 'border-bottom-right-radius': '8px'
     });
-    
+
     if (skydive == SkyDiveState.RUNNING && map.getZoom() == skydiveTarget) {
       skydive = SkyDiveState.DONE;
       ensureArtDisplayed();
@@ -113,19 +113,19 @@ function createMap(location) {
       }
     }
   });
-  
-  Microsoft.Maps.Events.addHandler(map, 'click', function(e) { 
+
+  Microsoft.Maps.Events.addHandler(map, 'click', function(e) {
     if (edit) {
       var point = new Microsoft.Maps.Point(e.getX(), e.getY());
       var loc = e.target.tryPixelToLocation(point);
       $("#latlong").text(loc.latitude + ", " + loc.longitude).show();
     }
   });
-  
+
   setTimeout(function() {
     skydive = SkyDiveState.RUNNING;
     map.setView({zoom: skydiveTarget, animate: true});
-  }, skydiveTimeout); 
+  }, skydiveTimeout);
 }
 
 function ensureArtDisplayed() {
@@ -136,7 +136,11 @@ function ensureArtDisplayed() {
     artPins.push(pin);
     map.entities.push(pin);
   }
-  art = artPins; 
+  art = artPins;
+}
+
+function ellips(text, len) {
+	return text.substr(0, len) + "...";
 }
 
 function makePin(id, piece) {
@@ -147,12 +151,18 @@ function makePin(id, piece) {
   }
   var pin = new Microsoft.Maps.Pushpin(
     new Microsoft.Maps.Location(piece.position[0], piece.position[1]),
-    { typeName: "artpiece", text: (embedMode) ? '' : piece.title,
+    { typeName: "artpiece",
+      text: (embedMode) ? '' : ((piece.title) ? ellips(piece.title, 8) : ("Please add title tag for id: " + piece.id)),
       icon: thumbURL(SIZE_FOR_ZOOM[map.getZoom()]),
-      textOffset: new Microsoft.Maps.Point(0, -14),
-      anchor: new Microsoft.Maps.Point(0, 0)
-    } 
+      textOffset: new Microsoft.Maps.Point(0, -16),
+      anchor: new Microsoft.Maps.Point(0, 0),
+      draggable: (edit) ? true : false
+    }
   );
+  pin.fullTitle = piece.title;
+  pin.expandCollapse = function(expand) {
+    pin.setOptions({text: (expand) ? pin.fullTitle : ellips(pin.fullTitle, 8), zIndex: 999999});
+  };
   pin.setThumbSize = function(size) {
     pin.setOptions({icon: thumbURL(size) })
   };
@@ -161,6 +171,12 @@ function makePin(id, piece) {
   };
   Microsoft.Maps.Events.addHandler(pin, 'click', function(e) {
     $("#project").show(30, function() { displayProject(piece, '#gallery') });
+  });
+  Microsoft.Maps.Events.addHandler(pin, 'mouseover', function(e) {
+    pin.expandCollapse(true);
+  });
+  Microsoft.Maps.Events.addHandler(pin, 'mouseout', function(e) {
+    pin.expandCollapse(false);
   });
   Microsoft.Maps.Events.addHandler(pin, 'dragend', function(e) {
     var loc = pin.getLocation();
@@ -175,11 +191,12 @@ function makePin(id, piece) {
 }
 
 function updateArtForZoom(zoom) {
-  art.forEach(function(piece) { 
+  art.forEach(function(piece) {
     if (zoom > 16) {
       piece.setVisibility(true);
-      
       piece.setThumbSize(SIZE_FOR_ZOOM[zoom]);
+      if (zoom > 18) piece.expandCollapse(true);
+      else piece.expandCollapse(false);
     } else piece.setVisibility(false);
   });
 }
