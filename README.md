@@ -1,22 +1,22 @@
 ## Nowhere Art Archive ##
 
 This repository contains the source for the Nowhere Art Archive site.
-Normally you can access the site here:
-http://www.goingnowhere.org/artarchive/archive.htm
+
+**The site is currently offline due to the APIs we used changing and no one having the time to perform the necessary maintenance.**
 
 The website is meant to display picures and information about art installations
 that were presented over the years at the Nowhere festival, in the Monegros
 region of Spain.
 
 The site is simply a front-end to display pictures from our photo storage on smugmug.com,
-which you can access here directly: https://nowhere-art.smugmug.com/ (though it
-does not make much sense as all photos are not organized in a way that make
-sense for people).
+which you can access here directly: https://nowhere-art.smugmug.com/ 
 
 The data is smugmug is accessed using simple AJAX calls to its API (see js/simple_smugmug.js)
 
 The metadata for the photos (tags and captions), as well as the album they are
-placed in, define how they will be viewed in the web site.
+placed in, define how they will be viewed in the web site. 
+
+Note that the back-end photo album has also not been well maintained and some pictures in it will not have the necessary metadata to work with this system anymore.
 
 ### Running the code ###
 
